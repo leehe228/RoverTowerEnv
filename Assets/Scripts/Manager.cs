@@ -23,7 +23,7 @@ public class Manager : MonoBehaviour
 
     void Start()
     {
-        mapsize = 16;
+        mapsize = 17;
         nagent = 4;
 
         grid = new int[mapsize, mapsize];
@@ -41,8 +41,8 @@ public class Manager : MonoBehaviour
         // Set Destination
         for (int i = 0; i < nagent; i++) {
             while (true){
-                int x = Random.Range(-1, mapsize);
-                int z = Random.Range(-1, mapsize);
+                int x = Random.Range(0, mapsize);
+                int z = Random.Range(0, mapsize);
 
                 if (grid[x, z] == 0) {
                     grid[x, z] = 1;
@@ -58,8 +58,8 @@ public class Manager : MonoBehaviour
 
         for (int i = 0; i < nagent; i++) {
             while (true){
-                int x = Random.Range(-1, mapsize);
-                int z = Random.Range(-1, mapsize);
+                int x = Random.Range(0, mapsize);
+                int z = Random.Range(0, mapsize);
 
                 if (grid[x, z] == 0) {
                     grid[x, z] = 1;
@@ -75,8 +75,8 @@ public class Manager : MonoBehaviour
 
         for (int i = 0; i < nagent; i++) {
             while (true){
-                int x = Random.Range(-1, mapsize);
-                int z = Random.Range(-1, mapsize);
+                int x = Random.Range(0, mapsize);
+                int z = Random.Range(0, mapsize);
 
                 if (grid[x, z] == 0) {
                     grid[x, z] = 1;
@@ -88,6 +88,22 @@ public class Manager : MonoBehaviour
                 }
             }
         }
+
+        // for Test 
+        /*rovers[0].transform.position = new Vector3(-8f, 0.1f, -8f);
+        rovers[1].transform.position = new Vector3(-8f, 0.1f, -6f);
+        rovers[2].transform.position = new Vector3(-8f, 0.1f, -4f);
+        rovers[3].transform.position = new Vector3(-8f, 0.1f, -2f);
+
+        towers[0].transform.position = new Vector3(-6f, 0.3f, -8f);
+        towers[1].transform.position = new Vector3(-6f, 0.3f, -6f);
+        towers[2].transform.position = new Vector3(-6f, 0.3f, -4f);
+        towers[3].transform.position = new Vector3(-6f, 0.3f, -2f);
+
+        destinations[0].transform.position = new Vector3(-4f, 0.01f, -8f);
+        destinations[1].transform.position = new Vector3(-4f, 0.01f, -6f);
+        destinations[2].transform.position = new Vector3(-4f, 0.01f, -4f);
+        destinations[3].transform.position = new Vector3(-4f, 0.01f, -2f);*/
 
         colors = new Color[nagent];
         colors[0] = new Color(232/255f, 74/255f, 30/255f);
@@ -101,6 +117,8 @@ public class Manager : MonoBehaviour
             towers[i].GetComponent<MeshRenderer>().material.color = colors[i];
             destinations[i].GetComponent<MeshRenderer>().material.color = colors[i];
         }
+
+        InvokeRepeating("InitWorld", 3f, 3f);
     }
 
     void Update()
@@ -149,8 +167,8 @@ public class Manager : MonoBehaviour
         // Set Position
         for (int i = 0; i < nagent; i++) {
             while (true){
-                int x = Random.Range(-1, mapsize);
-                int z = Random.Range(-1, mapsize);
+                int x = Random.Range(0, mapsize);
+                int z = Random.Range(0, mapsize);
 
                 if (grid[x, z] == 0) {
                     grid[x, z] = 1;
@@ -163,8 +181,8 @@ public class Manager : MonoBehaviour
 
         for (int i = 0; i < nagent; i++) {
             while (true){
-                int x = Random.Range(-1, mapsize);
-                int z = Random.Range(-1, mapsize);
+                int x = Random.Range(0, mapsize);
+                int z = Random.Range(0, mapsize);
 
                 if (grid[x, z] == 0) {
                     grid[x, z] = 1;
@@ -177,8 +195,8 @@ public class Manager : MonoBehaviour
 
         for (int i = 0; i < nagent; i++) {
             while (true){
-                int x = Random.Range(-1, mapsize);
-                int z = Random.Range(-1, mapsize);
+                int x = Random.Range(0, mapsize);
+                int z = Random.Range(0, mapsize);
 
                 if (grid[x, z] == 0) {
                     grid[x, z] = 1;
