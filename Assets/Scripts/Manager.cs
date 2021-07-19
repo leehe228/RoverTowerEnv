@@ -2,120 +2,103 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using Unity.MLAgents;
+
 public class Manager : MonoBehaviour
 {
 
+    // Prefabs
     public GameObject RoverPrefab;
     public GameObject TowerPrefab;
-    public GameObject DestinationPrefab;
+    public GameObject LandmarkPrefab;
 
+    // GameObject Array
     public GameObject[] rovers;
     public GameObject[] towers;
-    public GameObject[] destinations;
+    public GameObject[] landmarks;
 
-    public int[,] grid;
+    // World Grid
     public int mapsize;
     public int nagent;
+    public int nlandmark;
     public Color[] colors;
-
-    public Color lightonColor = new Color(1f, 1f, 1f);
-    public Color lightoffColor = new Color(70/255f, 70/255f, 70/255f);
 
     void Start()
     {
         mapsize = 17;
         nagent = 4;
+        nlandmark = 6;
 
-        grid = new int[mapsize, mapsize];
-
-        for (int i = 0; i < mapsize; i++) {
-            for (int j = 0; j < mapsize; j++) {
-                grid[i, j] = 0;
-            }
-        }
+        // Landmark Colors
+        colors = new Color[nlandmark];
+        colors[0] = new Color(192/255f, 0/255f, 0/255f);
+        colors[1] = new Color(255/255f, 192/255f, 0/255f);
+        colors[2] = new Color(0/255f, 176/255f, 80/255f);
+        colors[3] = new Color(0/255f, 176/255f, 240/255f);
+        colors[4] = new Color(0/255f, 112/255f, 192/255f);
+        colors[5] = new Color(112/255f, 48/255f, 160/255f);
 
         rovers = new GameObject[nagent];
         towers = new GameObject[nagent];
-        destinations = new GameObject[nagent];
+        landmarks = new GameObject[nlandmark];
 
-        // Set Destination
-        for (int i = 0; i < nagent; i++) {
-            while (true){
-                int x = Random.Range(0, mapsize);
-                int z = Random.Range(0, mapsize);
+        // Set Landmarks
+        for (int i = 0; i < nlandmark; i++) {
+            int x = Random.Range(0, mapsize);
+            int z = Random.Range(0, mapsize);
 
-                if (grid[x, z] == 0) {
-                    grid[x, z] = 1;
-
-                    GameObject temp = Instantiate(RoverPrefab);
-                    temp.transform.position = new Vector3(x - (mapsize / 2f), 0.1f, z - (mapsize / 2f));
-                    rovers[i] = temp;
-                    break;
-                }
-            }
-            
+            GameObject temp = Instantiate(LandmarkPrefab);
+            temp.transform.position = new Vector3(x - (mapsize / 2f), 0.01f, z - (mapsize / 2f));
+            temp.name = "Landmark" + i.ToString();
+            temp.GetComponent<MeshRenderer>().material.color = colors[i];
+            landmarks[i] = temp;
         }
 
+        // Rovers
         for (int i = 0; i < nagent; i++) {
-            while (true){
-                int x = Random.Range(0, mapsize);
-                int z = Random.Range(0, mapsize);
+            int x = Random.Range(0, mapsize);
+            int z = Random.Range(0, mapsize);
 
-                if (grid[x, z] == 0) {
-                    grid[x, z] = 1;
-
-                    GameObject temp = Instantiate(TowerPrefab);
-                    temp.transform.position = new Vector3(x - (mapsize / 2f), 0.3f, z - (mapsize / 2f));
-                    towers[i] = temp;
-                    break;
-                }
-            }
-            
+            GameObject temp = Instantiate(RoverPrefab);
+            temp.transform.position = new Vector3(x - (mapsize / 2f), 0.1f, z - (mapsize / 2f));
+            temp.name = "Rover" + i.ToString();
+            temp.GetComponent<RoverAgent>().nagent = nagent;
+            temp.GetComponent<RoverAgent>().nlandmark = nlandmark;
+            rovers[i] = temp;
         }
 
+        // Towers
         for (int i = 0; i < nagent; i++) {
-            while (true){
-                int x = Random.Range(0, mapsize);
-                int z = Random.Range(0, mapsize);
+            int x = Random.Range(0, mapsize);
+            int z = Random.Range(0, mapsize);
 
-                if (grid[x, z] == 0) {
-                    grid[x, z] = 1;
+            GameObject temp = Instantiate(TowerPrefab);
+            temp.transform.position = new Vector3(x - (mapsize / 2f), 0.3f, z - (mapsize / 2f));
+            temp.name = "Tower" + i.ToString();
+            temp.GetComponent<TowerAgent>().nagent = nagent;
+            temp.GetComponent<TowerAgent>().nlandmark = nlandmark;
 
-                    GameObject temp = Instantiate(DestinationPrefab);
-                    temp.transform.position = new Vector3(x - (mapsize / 2f), 0.01f, z - (mapsize / 2f));
-                    destinations[i] = temp;
-                    break;
-                }
+            // Add Academy Script to First Tower Agent
+            if (i == 0) {
+                temp.AddComponent<RoverTowerAcademy>();
             }
+
+            towers[i] = temp;
         }
 
-        // for Test 
-        /*rovers[0].transform.position = new Vector3(-8f, 0.1f, -8f);
-        rovers[1].transform.position = new Vector3(-8f, 0.1f, -6f);
-        rovers[2].transform.position = new Vector3(-8f, 0.1f, -4f);
-        rovers[3].transform.position = new Vector3(-8f, 0.1f, -2f);
-
-        towers[0].transform.position = new Vector3(-6f, 0.3f, -8f);
-        towers[1].transform.position = new Vector3(-6f, 0.3f, -6f);
-        towers[2].transform.position = new Vector3(-6f, 0.3f, -4f);
-        towers[3].transform.position = new Vector3(-6f, 0.3f, -2f);
-
-        destinations[0].transform.position = new Vector3(-4f, 0.01f, -8f);
-        destinations[1].transform.position = new Vector3(-4f, 0.01f, -6f);
-        destinations[2].transform.position = new Vector3(-4f, 0.01f, -4f);
-        destinations[3].transform.position = new Vector3(-4f, 0.01f, -2f);*/
-
-        colors = new Color[nagent];
-        colors[0] = new Color(232/255f, 74/255f, 30/255f);
-        colors[1] = new Color(255/255f, 250/255f, 107/255f);
-        colors[2] = new Color(30/255f, 232/255f, 175/255f);
-        colors[3] = new Color(42/255f, 140/255f, 245/255f);
-
-        // Set Colors
+        // Shuffle
         for (int i = 0; i < nagent; i++) {
-            rovers[i].GetComponent<MeshRenderer>().material.color = colors[i];
-            towers[i].GetComponent<MeshRenderer>().material.color = colors[i];
-            destinations[i].GetComponent<MeshRenderer>().material.color = colors[i];
+            int r = Random.Range(0, nlandmark);
+
+            rovers[i].GetComponent<RoverAgent>().Landmark = landmarks[r];
+            rovers[i].GetComponent<RoverAgent>().Tower = towers[i];
+            rovers[i].GetComponent<MeshRenderer>().material.color = landmarks[r].GetComponent<MeshRenderer>().material.color;
+            rovers[i].GetComponent<RoverAgent>().idx = i;
+
+            towers[i].GetComponent<TowerAgent>().Landmark = landmarks[r];
+            towers[i].GetComponent<TowerAgent>().Rover = rovers[i];
+            towers[i].GetComponent<MeshRenderer>().material.color = landmarks[r].GetComponent<MeshRenderer>().material.color;
+            towers[i].GetComponent<TowerAgent>().idx = i;
         }
 
         InvokeRepeating("InitWorld", 3f, 3f);
@@ -128,14 +111,6 @@ public class Manager : MonoBehaviour
 
     public void InitWorld() 
     {
-        grid = new int[mapsize, mapsize];
-
-        for (int i = 0; i < mapsize; i++) {
-            for (int j = 0; j < mapsize; j++) {
-                grid[i, j] = 0;
-            }
-        }
-
         // Set Pair Randomly
         for (int i = 0; i < nagent; i++) {
             int r1 = Random.Range(0, nagent);
@@ -155,62 +130,43 @@ public class Manager : MonoBehaviour
             towers[r2] = temp;
         }
 
-        for (int i = 0; i < nagent; i++) {
-            int r1 = Random.Range(0, nagent);
-            int r2 = Random.Range(0, nagent);
-
-            GameObject temp = destinations[r1];
-            destinations[r1] = destinations[r2];
-            destinations[r2] = temp;
-        }
-
         // Set Position
         for (int i = 0; i < nagent; i++) {
-            while (true){
                 int x = Random.Range(0, mapsize);
                 int z = Random.Range(0, mapsize);
 
-                if (grid[x, z] == 0) {
-                    grid[x, z] = 1;
-                    rovers[i].transform.position = new Vector3(x - (mapsize / 2f), 0.1f, z - (mapsize / 2f));
-                    break;
-                }
-            }
+                rovers[i].transform.position = new Vector3(x - (mapsize / 2f), 0.1f, z - (mapsize / 2f));
+                rovers[i].name = "Rover" + i.ToString();
+        }
+
+        for (int i = 0; i < nagent; i++) {
+                int x = Random.Range(0, mapsize);
+                int z = Random.Range(0, mapsize);
             
+                towers[i].transform.position = new Vector3(x - (mapsize / 2f), 0.3f, z - (mapsize / 2f));
+                towers[i].name = "Tower" + i.ToString();
         }
 
-        for (int i = 0; i < nagent; i++) {
-            while (true){
-                int x = Random.Range(0, mapsize);
-                int z = Random.Range(0, mapsize);
+        for (int i = 0; i < nlandmark; i++) {
+            int x = Random.Range(0, mapsize);
+            int z = Random.Range(0, mapsize);
 
-                if (grid[x, z] == 0) {
-                    grid[x, z] = 1;
-                    towers[i].transform.position = new Vector3(x - (mapsize / 2f), 0.3f, z - (mapsize / 2f));
-                    break;
-                }
-            }
-            
+            landmarks[i].transform.position = new Vector3(x - (mapsize / 2f), 0.01f, z - (mapsize / 2f));
         }
 
+        // Shuffle
         for (int i = 0; i < nagent; i++) {
-            while (true){
-                int x = Random.Range(0, mapsize);
-                int z = Random.Range(0, mapsize);
+            int r = Random.Range(0, nlandmark);
 
-                if (grid[x, z] == 0) {
-                    grid[x, z] = 1;
-                    destinations[i].transform.position = new Vector3(x - (mapsize / 2f), 0.01f, z - (mapsize / 2f));
-                    break;
-                }
-            }
-        }
+            rovers[i].GetComponent<RoverAgent>().Landmark = landmarks[r];
+            rovers[i].GetComponent<RoverAgent>().Tower = towers[i];
+            rovers[i].GetComponent<MeshRenderer>().material.color = landmarks[r].GetComponent<MeshRenderer>().material.color;
+            rovers[i].GetComponent<RoverAgent>().idx = i;
 
-        // Set Colors
-        for (int i = 0; i < nagent; i++) {
-            rovers[i].GetComponent<MeshRenderer>().material.color = colors[i];
-            towers[i].GetComponent<MeshRenderer>().material.color = colors[i];
-            destinations[i].GetComponent<MeshRenderer>().material.color = colors[i];
+            towers[i].GetComponent<TowerAgent>().Landmark = landmarks[r];
+            towers[i].GetComponent<TowerAgent>().Rover = rovers[i];
+            towers[i].GetComponent<MeshRenderer>().material.color = landmarks[r].GetComponent<MeshRenderer>().material.color;
+            towers[i].GetComponent<TowerAgent>().idx = i;
         }
     }
 }

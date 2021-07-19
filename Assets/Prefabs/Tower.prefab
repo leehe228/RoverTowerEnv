@@ -109,6 +109,9 @@ GameObject:
   - component: {fileID: 498439854050300148}
   - component: {fileID: 498439854050300151}
   - component: {fileID: 498439854050300150}
+  - component: {fileID: -4921436957754730542}
+  - component: {fileID: -4143392087126297111}
+  - component: {fileID: -4241062337947511789}
   m_Layer: 0
   m_Name: Tower
   m_TagString: Untagged
@@ -192,7 +195,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 498439854050300041}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5000001
   m_Height: 2
@@ -209,11 +212,82 @@ Rigidbody:
   m_Mass: 10
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &-4921436957754730542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 498439854050300041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BrainParameters:
+    VectorObservationSize: 8
+    NumStackedVectorObservations: 1
+    VectorActionSize: 0100000001000000010000000100000001000000
+    VectorActionDescriptions: []
+    VectorActionSpaceType: 0
+  m_Model: {fileID: 0}
+  m_InferenceDevice: 0
+  m_BehaviorType: 0
+  m_BehaviorName: TowerAgent
+  TeamId: 0
+  m_UseChildSensors: 1
+--- !u!114 &-4143392087126297111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 498439854050300041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2428657881d6184ebe17a2e808501fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+  idx: 0
+  Rover: {fileID: 0}
+  Landmark: {fileID: 0}
+  nagent: 0
+  nlandmark: 0
+  signal0: 0
+  signal1: 0
+  signal2: 0
+  signal3: 0
+  signal4: 0
+  light0: {fileID: 0}
+  light1: {fileID: 0}
+  light2: {fileID: 0}
+  light3: {fileID: 0}
+  light4: {fileID: 0}
+  lightonColor: {r: 1, g: 1, b: 1, a: 1}
+  lightoffColor: {r: 0.27450982, g: 0.27450982, b: 0.27450982, a: 1}
+--- !u!114 &-4241062337947511789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 498439854050300041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DecisionPeriod: 1
+  TakeActionsBetweenDecisions: 0
 --- !u!1 &498439854216278623
 GameObject:
   m_ObjectHideFlags: 0

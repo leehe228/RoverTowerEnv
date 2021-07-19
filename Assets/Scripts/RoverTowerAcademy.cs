@@ -11,6 +11,6 @@ public class RoverTowerAcademy : MonoBehaviour
     }
 
     public void EnvironmentReset() {
-
+        GameObject.Find("Map").GetComponent<Manager>().InitWorld();
     }
 }
