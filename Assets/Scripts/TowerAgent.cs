@@ -156,7 +156,7 @@ public class TowerAgent : Agent
 
     public void GiveReward(float reward)
     {
-        SetReward(reward);
+        AddReward(reward);
     }
 
     public void MakeEpisodeEnd()
